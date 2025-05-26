@@ -1,4 +1,294 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+<div class="py-6 px-4 sm:px-6 lg:px-8 max-w-2xl mx-auto">
+  <h1 class="text-3xl font-bold text-gray-900 mb-6">
+    {{ form.vars.data.id ? "Edit Product" : "New Product" }}
+  </h1>
+
+  {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
+  <div>
+    {{ form_label(form.productName, 'Product Name', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'
+
+
+
+
+
+
+
+
+
+    }}) }}
+    {{ form_widget(form.productName, {'attr': {'class': 'mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-950'
+
+
+
+
+
+
+
+
+
+    }}) }}
+    {{ form_errors(form.productName, {'attr': {'class': 'text-red-600 text-sm mt-1'
+
+
+
+
+
+
+
+
+
+    }}) }}
+  </div>
+
+  <div>
+    {{ form_label(form.slug, 'Slug', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'
+
+
+
+
+
+
+
+
+
+    }}) }}
+    {{ form_widget(form.slug, {'attr': {'class': 'mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-950'
+
+
+
+
+
+
+
+
+
+    }}) }}
+    {{ form_errors(form.slug, {'attr': {'class': 'text-red-600 text-sm mt-1'}})
+    }}
+  </div>
+
+  <div>
+    {{ form_label(form.price, 'Price (€)', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'
+
+
+
+
+
+
+
+
+
+    }}) }}
+    {{ form_widget(form.price, {'attr': {'class': 'mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-950'
+
+
+
+
+
+
+
+
+
+    }}) }}
+    {{ form_errors(form.price, {'attr': {'class': 'text-red-600 text-sm mt-1'}})
+    }}
+  </div>
+
+  <div>
+    {{ form_label(form.quantity, 'Quantity', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'
+
+
+
+
+
+
+
+
+
+    }}) }}
+    {{ form_widget(form.quantity, {'attr': {'class': 'mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-950'
+
+
+
+
+
+
+
+
+
+    }}) }}
+    {{ form_errors(form.quantity, {'attr': {'class': 'text-red-600 text-sm mt-1'
+
+
+
+
+
+
+
+
+
+    }}) }}
+  </div>
+
+  <div>
+    {{ form_label(form.description, 'Description', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'
+
+
+
+
+
+
+
+
+
+    }}) }}
+    {{ form_widget(form.description, {'attr': {'class': 'mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-950'
+
+
+
+
+
+
+
+
+
+    }}) }}
+    {{ form_errors(form.description, {'attr': {'class': 'text-red-600 text-sm mt-1'
+
+
+
+
+
+
+
+
+
+    }}) }}
+  </div>
+
+  <div>
+    {{ form_label(form.category, 'Category', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'
+
+
+
+
+
+
+
+
+
+    }}) }}
+    {{ form_widget(form.category, {'attr': {'class': 'mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-950'
+
+
+
+
+
+
+
+
+
+    }}) }}
+    {{ form_errors(form.category, {'attr': {'class': 'text-red-600 text-sm mt-1'
+
+
+
+
+
+
+
+
+
+    }}) }}
+  </div>
+
+  <div class="flex justify-end">
+    <button
+      type="submit"
+      class="px-6 py-2 bg-yellow-500 text-white font-semibold rounded-lg hover:bg-blue-950 transition-all duration-300"
+    >
+      {{ button_label|default('Save') }}
+    </button>
+  </div>
+  {{ form_end(form) }}
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const productNameInput = document.querySelector(
+      "#{{ form.productName.vars.id }}"
+    );
+    const slugInput = document.querySelector("#{{ form.slug.vars.id }}");
+    const suggestionsContainer = document.getElementById("slug-suggestions");
+    const suggestionList = document.getElementById("suggestion-list");
+
+    function slugify(text) {
+      return text
+        .toString()
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, "-")
+        .replace(/[^\w\-]+/g, "")
+        .replace(/\-\-+/g, "-")
+        .replace(/^-+/, "")
+        .replace(/-+$/, "");
+    }
+
+    function generateSlugSuggestions(name) {
+      const baseSlug = slugify(name);
+      const suggestions = [
+        baseSlug,
+        `${baseSlug}-${Math.floor(Math.random() * 100)}`,
+        baseSlug.replace(/-/g, "_"),
+        `new-${baseSlug}`,
+        `${baseSlug}-v1`,
+      ].filter((s, i, arr) => s && arr.indexOf(s) === i);
+      return suggestions;
+    }
+
+    function updateSuggestions(name) {
+      suggestionList.innerHTML = "";
+      if (!name) {
+        suggestionsContainer.classList.add("hidden");
+        return;
+      }
+
+      const suggestions = generateSlugSuggestions(name);
+      suggestions.forEach((suggestion) => {
+        const li = document.createElement("li");
+        li.textContent = suggestion;
+        li.className =
+          "px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm text-gray-700";
+        li.addEventListener("click", () => {
+          slugInput.value = suggestion;
+          suggestionsContainer.classList.add("hidden");
+        });
+        suggestionList.appendChild(li);
+      });
+
+      suggestionsContainer.classList.toggle("hidden", suggestions.length === 0);
+    }
+
+    productNameInput.addEventListener("input", () => {
+      const productName = productNameInput.value;
+      slugInput.value = slugify(productName);
+      updateSuggestions(productName);
+    });
+
+    slugInput.addEventListener("focus", () => {
+      updateSuggestions(productNameInput.value);
+    });
+
+    slugInput.addEventListener("blur", () => {
+      setTimeout(() => {
+        suggestionsContainer.classList.add("hidden");
+      }, 200);
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!suggestionsContainer.contains(e.target) && e.target !== slugInput) {
+        suggestionsContainer.classList.add("hidden");
+      }
+    });
+  });
+</script>

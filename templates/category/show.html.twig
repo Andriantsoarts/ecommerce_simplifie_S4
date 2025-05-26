@@ -1,38 +1,39 @@
-{% extends 'base.html.twig' %}
+{% extends 'dashboard/index.html.twig' %} {% block title %}Category{% endblock
+%} {% block content %}
+<h1>Category</h1>
 
-{% block title %}Category{% endblock %}
+<table class="table">
+  <tbody>
+    <tr>
+      <th>Id</th>
+      <td>{{ category.id }}</td>
+    </tr>
+    <tr>
+      <th>CategoryName</th>
+      <td>{{ category.categoryName }}</td>
+    </tr>
+    <tr>
+      <th>CategorySlug</th>
+      <td>{{ category.categorySlug }}</td>
+    </tr>
+    <tr>
+      <th>CreatedAt</th>
+      <td>
+        {{ category.createdAt ? category.createdAt|date('Y-m-d H:i:s') : '' }}
+      </td>
+    </tr>
+    <tr>
+      <th>UpdatedAt</th>
+      <td>
+        {{ category.updatedAt ? category.updatedAt|date('Y-m-d H:i:s') : '' }}
+      </td>
+    </tr>
+  </tbody>
+</table>
 
-{% block body %}
-    <h1>Category</h1>
+<a href="{{ path('app_category_index') }}">back to list</a>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ category.id }}</td>
-            </tr>
-            <tr>
-                <th>CategoryName</th>
-                <td>{{ category.categoryName }}</td>
-            </tr>
-            <tr>
-                <th>CategorySlug</th>
-                <td>{{ category.categorySlug }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ category.createdAt ? category.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>UpdatedAt</th>
-                <td>{{ category.updatedAt ? category.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+<a href="{{ path('app_category_edit', { id: category.id }) }}">edit</a>
 
-    <a href="{{ path('app_category_index') }}">back to list</a>
-
-    <a href="{{ path('app_category_edit', {'id': category.id}) }}">edit</a>
-
-    {{ include('category/_delete_form.html.twig') }}
+{{ include("category/_delete_form.html.twig") }}
 {% endblock %}

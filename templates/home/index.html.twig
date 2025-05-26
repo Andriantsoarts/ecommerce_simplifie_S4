@@ -1,16 +1,156 @@
-{% extends 'base.html.twig' %} {% block title %}Hello HomeController!{% endblock
-%} {% block body %}
+{% extends 'base.html.twig' %} {% block title %}Accueil - Mon E-commerce{%
+endblock %} {% block body %}
+<div class="bg-gray-100 min-h-screen flex flex-col">
+  {# Navbar #}
+  <div class="shadow-md bg-white">{% include 'NavBar/navbar.html.twig' %}</div>
 
-<div class="example-wrapper">
-  {% include 'NavBar/navbar.html.twig' %}
-  <h1>Hello {{ controller_name }}! ✅</h1>
-  {% if app.user %}
-    <h2>Welcome back, {{ app.user.username }}!</h2>
-  <a href="{{ path('app_logout') }}">Logout</a>
-  {% else %}
-    <h2>Welcome to our site!</h2>
-  <a href="{{ path('app_login') }}">Login</a>
-  <a href="{{ path('app_register') }}">Register</a>
-  {% endif %}
+  {# Carousel #}
+  <div class="carousel-container mt-4">
+    <div class="carousel-track">
+      <div class="carousel-slide">
+        <img src="https://placehold.co/600x400" alt="Promo 1" />
+      </div>
+      <div class="carousel-slide">
+        <img src="https://placehold.co/600x400" alt="Promo 2" />
+      </div>
+      <div class="carousel-slide">
+        <img src="https://placehold.co/600x400" alt="Promo 3" />
+      </div>
+    </div>
+  </div>
+
+  {# Produits #}
+  <section class="py-12 px-4 bg-white">
+    <h2 class="text-3xl font-bold text-center mb-10">Nos Produits</h2>
+    <div
+      class="flex flex-col items-center mb-6 space-y-4 md:flex-row md:space-y-0 md:space-x-4 md:justify-center"
+    >
+      <input
+        id="search-input"
+        type="text"
+        placeholder="Rechercher un produit..."
+        class="w-full max-w-md px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-950"
+      />
+      <select
+        id="sort-select"
+        class="w-full max-w-xs px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-950"
+      >
+        <option value="name-asc">Nom (A-Z)</option>
+        <option value="name-desc">Nom (Z-A)</option>
+        <option value="price-asc">Prix (croissant)</option>
+        <option value="price-desc">Prix (décroissant)</option>
+      </select>
+      <div class="flex space-x-2">
+        <input
+          id="min-price"
+          type="number"
+          placeholder="Prix min (€)"
+          class="w-32 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-950"
+        />
+        <input
+          id="max-price"
+          type="number"
+          placeholder="Prix max (€)"
+          class="w-32 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-950"
+        />
+      </div>
+    </div>
+    <div
+      id="product-grid"
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+    >
+      {% for i in 1..500 %}
+      <div
+        class="product-item bg-white shadow rounded-lg overflow-hidden"
+        data-index="{{ i - 1 }}"
+      >
+        <img
+          src="https://source.unsplash.com/300x200/?product,{{ i }}"
+          alt="Produit {{ i }}"
+          class="w-full h-48 object-cover"
+        />
+        <div class="p-4">
+          <h3 class="text-lg font-semibold">Produit {{ i }}</h3>
+          <p class="text-gray-600">Description courte du produit {{ i }}.</p>
+          <p class="text-blue-950 font-bold mt-2">€{{ i * 3.5 }}</p>
+          <button
+            class="mt-4 bg-yellow-500 hover:bg-blue-950 hover:cursor-pointer transition-all duration-300 text-white px-4 py-2 rounded"
+          >
+            Ajouter au panier
+          </button>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="flex justify-center mt-8 space-x-2">
+      <button
+        id="prev-page"
+        class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:cursor-pointer hover:bg-yellow-500 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Précédent
+      </button>
+      <div id="page-numbers" class="flex space-x-1"></div>
+      <button
+        id="next-page"
+        class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:cursor-pointer hover:bg-yellow-500 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Suivant
+      </button>
+    </div>
+  </section>
+
+  {# Section Services / À propos #}
+  <section class="bg-gray-100 py-16 px-6" id="services">
+    <h2 class="text-3xl font-bold text-center mb-12">Nos Services</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
+      <div
+        class="p-6 bg-white rounded-lg shadow text-yellow-500 hover:bg-yellow-500 hover:text-blue-950 hover:shadow-blue-950 transition-all duration-300 hover:cursor-pointer"
+      >
+        <i class="fas fa-shipping-fast text-4xl mb-4"></i>
+        <h3 class="text-xl font-semibold text-black mb-2">Livraison Rapide</h3>
+        <p class="text-gray-600">
+          Recevez vos produits en 48h partout en France.
+        </p>
+      </div>
+      <div
+        class="p-6 bg-white rounded-lg shadow text-yellow-500 hover:bg-yellow-500 hover:text-blue-950 hover:shadow-blue-950 transition-all duration-300 hover:cursor-pointer"
+      >
+        <i class="fas fa-lock text-4xl mb-4"></i>
+        <h3 class="text-xl font-semibold text-black mb-2">Paiement Sécurisé</h3>
+        <p class="text-gray-600">
+          Paiement par carte bancaire ou PayPal sécurisé.
+        </p>
+      </div>
+      <div
+        class="p-6 bg-white rounded-lg shadow text-yellow-500 hover:bg-yellow-500 hover:text-blue-950 hover:shadow-blue-950 transition-all duration-300 hover:cursor-pointer"
+      >
+        <i class="fas fa-thumbs-up text-4xl mb-4"></i>
+        <h3 class="text-xl font-semibold text-black mb-2">
+          Satisfait ou remboursé
+        </h3>
+        <p class="text-gray-600">30 jours pour changer d’avis.</p>
+      </div>
+    </div>
+  </section>
+
+  {# Footer #}
+  <footer class="bg-blue-950 text-white mt-auto py-8">
+    <div class="container mx-auto text-center">
+      <p class="text-sm">
+        &copy; {{ "now"|date("Y") }} Mon E-commerce. Tous droits réservés.
+      </p>
+      <div class="mt-4 flex justify-center space-x-4">
+        <a href="#" class="hover:text-yellow-500"
+          ><i class="fab fa-facebook-f"></i
+        ></a>
+        <a href="#" class="hover:text-yellow-500"
+          ><i class="fab fa-twitter"></i
+        ></a>
+        <a href="#" class="hover:text-yellow-500"
+          ><i class="fab fa-instagram"></i
+        ></a>
+      </div>
+    </div>
+  </footer>
 </div>
 {% endblock %}

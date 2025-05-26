@@ -1,31 +1,80 @@
-<nav class="navbar">
-  <a href="#" class="logo">LOREM</a>
-  <div class="nav_links">
-    <ul>
-      <li><a href="#">Home</a></li>
-      <li><a href="#">About Us</a></li>
-      <li><a href="#">Contact</a></li>
-    </ul>
+<nav class="bg-blue-950 text-white px-6 py-4 flex justify-between items-center">
+  <!-- Logo -->
+  <a href="#" class="text-2xl font-bold">LOREM</a>
+
+  <!-- Navigation Links (Desktop) -->
+  <div class="hidden md:flex space-x-6">
+    <a href="#" class="hover:text-yellow-500">Home</a>
+    <a href="#services" class="hover:text-yellow-500">Services</a>
+    <a href="#" class="hover:text-yellow-500">About Us</a>
+    <a href="#" class="hover:text-yellow-500">Contact</a>
   </div>
-  {% if app.user %}
-  <div class="profile">
-    <a href="#" class="profile_icon">
-      <i class="fas fa-user"></i><i class="fas fa-sort-down"></i>
-    </a>
-    <span class="username">{{ app.user.username }}</span>
-    <div class="dropdown_menu">
-      <ul>
-        <li><a href="#">Profile</a></li>
-        <li><a href="{{ path('app_dashboard') }}">Dashboard</a></li>
-        <li><a href="#">Settings</a></li>
-        <li><a href="{{ path('app_logout') }}">Logout</a></li>
-      </ul>
+
+  <!-- Right Side: Cart + Auth/Profile -->
+  <div class="flex items-center space-x-6">
+    <!-- Cart Icon -->
+    <div class="relative">
+      <a href="#" class="hover:text-yellow-500">
+        <i class="fas fa-shopping-cart text-xl"></i>
+      </a>
+      {# Badge example (if you want to show number of items): #}
+      <span
+        class="absolute -top-3 -right-3 bg-yellow-500 text-black text-xs font-bold px-2 py-0.5 rounded-full"
+        >3</span
+      >
     </div>
+
+    {% if app.user %}
+    <div class="relative group">
+      <button class="flex items-center space-x-2 hover:text-yellow-500">
+        <i class="fas fa-user"></i>
+        <i class="fas fa-sort-down"></i>
+        <span class="ml-2 hidden sm:inline">{{ app.user.username }}</span>
+      </button>
+
+      <!-- Dropdown Menu -->
+      <div
+        class="absolute right-0 w-48 bg-white text-black border-2 border-yellow-500 rounded-md shadow-lg z-50 hidden group-hover:block"
+      >
+        <ul class="py-2">
+          <li>
+            <a
+              href="#"
+              class="block px-4 py-2 hover:bg-blue-900 hover:text-white"
+              >Profile</a
+            >
+          </li>
+          <li>
+            <a
+              href="{{ path('app_dashboard') }}"
+              class="block px-4 py-2 hover:bg-blue-900 hover:text-white"
+              >Dashboard</a
+            >
+          </li>
+          <li>
+            <a
+              href="#"
+              class="block px-4 py-2 hover:bg-blue-900 hover:text-white"
+              >Settings</a
+            >
+          </li>
+          <li>
+            <a
+              href="{{ path('app_logout') }}"
+              class="block px-4 py-2 text-red-600 hover:bg-blue-900"
+              >Logout</a
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+    {% else %}
+    <div class="space-x-4">
+      <a href="{{ path('app_login') }}" class="hover:text-gray-300">Login</a>
+      <a href="{{ path('app_register') }}" class="hover:text-gray-300"
+        >Register</a
+      >
+    </div>
+    {% endif %}
   </div>
-  {% else %}
-  <div class="profile">
-    <a href="{{ path('app_login') }}">Login</a>
-    <a href="{{ path('app_register') }}">Register</a>
-  </div>
-  {% endif %}
 </nav>

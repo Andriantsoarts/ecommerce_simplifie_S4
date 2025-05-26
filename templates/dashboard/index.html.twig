@@ -12,24 +12,59 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    {% block stylesheets %} {% endblock %} {% block javascripts %} {% block
-    importmap %}{{
-      importmap("app")
-    }}{% endblock %} {% endblock %}
+    {% block stylesheets %}{{
+      encore_entry_link_tags("app")
+    }}{% endblock %} {% block javascripts %}
+    {{
+      encore_entry_script_tags("app")
+    }}
+    {% endblock %}
   </head>
-  <body>
-    <div class="dashboard">
-      <div class="sidebar">
-        <a href="{{ path('app_home') }}"
-          ><i class="fas fa-arrow-left"></i> Back to site</a
-        >
-        <h1>Dashboard</h1>
-        <ul>
-          <li><a href="{{ path('app_product_index') }}">Products</a></li>
-          <li><a href="{{ path('app_logout') }}">Logout</a></li>
+  <body class="min-h-screen bg-gray-100 text-gray-800 flex">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white shadow-lg p-6 flex flex-col">
+      <a
+        href="{{ path('app_home') }}"
+        class="text-blue-500 hover:text-blue-700 flex items-center gap-2 mb-4"
+      >
+        <i class="fas fa-arrow-left"></i> <span>Back to site</span>
+      </a>
+      <h1 class="text-2xl font-bold mb-6">Dashboard</h1>
+      <nav class="flex-1">
+        <ul class="space-y-3">
+          <li>
+            <a
+              href="{{ path('app_product_index') }}"
+              class="block py-2 px-4 rounded hover:bg-blue-100"
+            >
+              <i class="fas fa-box mr-2"></i> Products
+            </a>
+          </li>
+          <li>
+            <a
+              href="{{ path('app_category_index') }}"
+              class="block py-2 px-4 rounded hover:bg-blue-100"
+            >
+              <i class="fas fa-tags mr-2"></i> Category
+            </a>
+          </li>
+          <li>
+            <a
+              href="{{ path('app_logout') }}"
+              class="block py-2 px-4 rounded text-red-600 hover:bg-red-100"
+            >
+              <i class="fas fa-sign-out-alt mr-2"></i> Logout
+            </a>
+          </li>
         </ul>
-      </div>
-      <div class="content">{% block content %} {% endblock %}</div>
-    </div>
+      </nav>
+    </aside>
+
+    <!-- Main content -->
+    <main class="flex-1 p-6 overflow-y-auto">
+      {% block content %}
+      <!-- Page-specific content goes here -->
+      {% endblock %}
+    </main>
   </body>
 </html>
