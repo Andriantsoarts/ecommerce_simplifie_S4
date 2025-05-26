@@ -1,0 +1,47 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+:root {
+  --primary-color: rgb(21, 34, 53);
+  --secondary-color: rgb(255, 187, 0);
+  --primary-clicked-color: rgb(45, 70, 108);
+  --secondary-clicked-color: rgb(179, 131, 0);
+  --light-color: rgb(213, 213, 213);
+  --text-color: white;
+  --text-colored-1: rgb(21, 34, 53);
+  --text-colored-2: rgb(255, 187, 0);
+}
+/* Dashboard */
+.dashboard {
+  background-color: #f4f4f4;
+  display: flex;
+}
+.dashboard h1 {
+  color: #333;
+}
+.dashboard .sidebar {
+  background-color: var(--primary-color);
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  height: 100vh;
+  border-bottom-right-radius: 20px;
+  border-top-right-radius: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 25%;
+  min-width: 250px;
+  height: 100vh;
+  z-index: 1;
+  overflow: hidden;
+}
+.dashboard .content {
+  flex: 1;
+  box-sizing: border-box;
+  padding: 20px;
+  background-color: var(--light-color);
+  height: 100vh;
+  overflow: hidden;
+}
+/* Dashboard */

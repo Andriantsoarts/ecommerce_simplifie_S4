@@ -2,6 +2,7 @@
 %} {% block body %}
 
 <div class="example-wrapper">
+  {% include 'NavBar/navbar.html.twig' %}
   <h1>Hello {{ controller_name }}! ✅</h1>
   {% if app.user %}
     <h2>Welcome back, {{ app.user.username }}!</h2>

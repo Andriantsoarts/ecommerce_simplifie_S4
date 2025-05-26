@@ -1,0 +1,31 @@
+<nav class="navbar">
+  <a href="#" class="logo">LOREM</a>
+  <div class="nav_links">
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </div>
+  {% if app.user %}
+  <div class="profile">
+    <a href="#" class="profile_icon">
+      <i class="fas fa-user"></i><i class="fas fa-sort-down"></i>
+    </a>
+    <span class="username">{{ app.user.username }}</span>
+    <div class="dropdown_menu">
+      <ul>
+        <li><a href="#">Profile</a></li>
+        <li><a href="{{ path('app_dashboard') }}">Dashboard</a></li>
+        <li><a href="#">Settings</a></li>
+        <li><a href="{{ path('app_logout') }}">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+  {% else %}
+  <div class="profile">
+    <a href="{{ path('app_login') }}">Login</a>
+    <a href="{{ path('app_register') }}">Register</a>
+  </div>
+  {% endif %}
+</nav>
