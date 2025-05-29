@@ -1,0 +1,20 @@
+<h1>Résumé de votre commande</h1>
+
+<p><strong>Commande n°:</strong> 2025{{ order.id }}</p>
+<p><strong>Adresse de livraison:</strong> {{ order.deliveryAddress }}</p>
+<p><strong>Statut:</strong> {{ order.status }}</p>
+
+<h2>Articles :</h2>
+<ul>
+  {% for item in order.items %}
+
+  <li>
+    {{ item.product.productName }} - Quantité: {{ item.quantity }} - Prix:
+    {{ item.price }}€
+  </li>
+  {% endfor %}
+</ul>
+
+<form method="post" action="{{ path('order_confirm', { id: order.id }) }}">
+  <button type="submit" class="btn btn-success">Confirmer la commande</button>
+</form>

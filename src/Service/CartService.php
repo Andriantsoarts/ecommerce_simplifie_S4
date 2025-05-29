@@ -1,8 +1,10 @@
 <?php
 namespace App\Service;
 
+use App\Entity\Cart;
 use App\Repository\CartItemRepository;
 use App\Repository\CartRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 
 class CartService
@@ -10,12 +12,14 @@ class CartService
     private $cartItemRepository;
     private $cartRepository;
     private $security;
+    private $em;
 
-    public function __construct(CartItemRepository $cartItemRepository,CartRepository $cartRepository , Security $security)
+    public function __construct(CartItemRepository $cartItemRepository,CartRepository $cartRepository , Security $security,EntityManagerInterface $em)
     {
         $this->cartItemRepository = $cartItemRepository;
         $this->cartRepository = $cartRepository;
         $this->security = $security;
+        $this->em = $em;
     }
 
     public function getCartItemCount(): int
@@ -42,4 +46,27 @@ class CartService
 
         return $total;
     }
+    public function clearCart(): void
+    {
+        $user = $this->security->getUser();
+
+        // On récupère les paniers de l'utilisateur dont la commande est finalisée
+        $carts = $this->cartRepository->findBy([
+            'userOwner' => $user,
+            'isOrderDone' => true,
+        ]);
+
+        foreach ($carts as $cart) {
+            // Supprimer les items du panier
+            foreach ($cart->getCartItems() as $item) {
+                $item->setCart(null);
+            }
+
+            // Puis supprimer le panier lui-même
+            $this->em->remove($cart);
+        }
+
+        $this->em->flush();
+    }
+
 }

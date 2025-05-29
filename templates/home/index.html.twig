@@ -75,11 +75,19 @@
         class="product-item bg-white shadow rounded-lg overflow-hidden"
         data-id="{{ product.id }}"
       >
+        {% if product.imageUrl %}
+        <img
+          src="{{ product.imageUrl }}"
+          alt="{{ product.productName }}"
+          class="w-full h-48 object-cover"
+        />
+        {% else %}
         <img
           src="https://placehold.co/200x300?text={{ product.productName|url_encode }}"
           alt="{{ product.productName }}"
           class="w-full h-48 object-cover"
         />
+        {% endif %}
         <div class="p-4">
           <h3 class="text-lg font-semibold">{{ product.productName }}</h3>
           <p class="text-gray-600">{{ product.description }}</p>

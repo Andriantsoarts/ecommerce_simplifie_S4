@@ -37,6 +37,7 @@ final class CartController extends AbstractController
       if (!$cart) {
           $cart = new Cart();
           $cart->setUserOwner($user);
+          $cart->setIsOrderDone(false);
           $cart->setCreatedAt(new \DateTimeImmutable());
           $cart->setUpdatedAt(new \DateTimeImmutable());
           $em->persist($cart);
