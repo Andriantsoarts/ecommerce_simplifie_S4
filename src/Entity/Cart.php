@@ -30,6 +30,9 @@ class Cart
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    #[ORM\Column]
+    private ?bool $isOrderDone = null;
+
     public function __construct()
     {
         $this->cartItems = new ArrayCollection();
@@ -102,6 +105,18 @@ class Cart
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function isOrderDone(): ?bool
+    {
+        return $this->isOrderDone;
+    }
+
+    public function setIsOrderDone(bool $isOrderDone): static
+    {
+        $this->isOrderDone = $isOrderDone;
 
         return $this;
     }

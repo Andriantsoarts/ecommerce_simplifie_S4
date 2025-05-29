@@ -1,27 +1,22 @@
 <nav class="bg-blue-950 text-white px-6 py-4 flex justify-between items-center">
-  <!-- Logo -->
-  <a href="#" class="text-2xl font-bold">LOREM</a>
+  <a href="/" class="text-2xl font-bold">ShirTeeZone</a>
 
-  <!-- Navigation Links (Desktop) -->
   <div class="hidden md:flex space-x-6">
-    <a href="#" class="hover:text-yellow-500">Home</a>
-    <a href="#services" class="hover:text-yellow-500">Services</a>
-    <a href="#" class="hover:text-yellow-500">About Us</a>
-    <a href="#" class="hover:text-yellow-500">Contact</a>
+    <a href="/" class="hover:text-yellow-500">Accueil</a>
+    <a href="#services" class="hover:text-yellow-500">Nos ervices</a>
+    <a href="#" class="hover:text-yellow-500">A propos de nous</a>
+    <a href="#" class="hover:text-yellow-500">Nous contacter</a>
   </div>
 
-  <!-- Right Side: Cart + Auth/Profile -->
   <div class="flex items-center space-x-6">
-    <!-- Cart Icon -->
     <div class="relative">
-      <a href="#" class="hover:text-yellow-500">
+      <a href="{{ path('app_cart_detail') }}" class="hover:text-yellow-500">
         <i class="fas fa-shopping-cart text-xl"></i>
       </a>
-      {# Badge example (if you want to show number of items): #}
       <span
         class="absolute -top-3 -right-3 bg-yellow-500 text-black text-xs font-bold px-2 py-0.5 rounded-full"
-        >3</span
-      >
+        >{{ cartItemCount }}
+      </span>
     </div>
 
     {% if app.user %}
@@ -32,7 +27,6 @@
         <span class="ml-2 hidden sm:inline">{{ app.user.username }}</span>
       </button>
 
-      <!-- Dropdown Menu -->
       <div
         class="absolute right-0 w-48 bg-white text-black border-2 border-yellow-500 rounded-md shadow-lg z-50 hidden group-hover:block"
       >
@@ -41,9 +35,10 @@
             <a
               href="#"
               class="block px-4 py-2 hover:bg-blue-900 hover:text-white"
-              >Profile</a
+              >Mon profil</a
             >
           </li>
+          {% if 'ROLE_ADMIN' in app.user.roles %}
           <li>
             <a
               href="{{ path('app_dashboard') }}"
@@ -51,18 +46,21 @@
               >Dashboard</a
             >
           </li>
-          <li>
-            <a
-              href="#"
-              class="block px-4 py-2 hover:bg-blue-900 hover:text-white"
-              >Settings</a
-            >
-          </li>
+          {% else %}
+          <a
+            href="#"
+            class="block px-4 py-2 hover:bg-blue-900 hover:text-white"
+          >
+            Mes commandes</a
+          >
+          {% endif %}
+
           <li>
             <a
               href="{{ path('app_logout') }}"
               class="block px-4 py-2 text-red-600 hover:bg-blue-900"
-              >Logout</a
+              onclick="return confirm('Voulez-vous vraiment vous déconnecter ?');"
+              >Se déconnecter</a
             >
           </li>
         </ul>

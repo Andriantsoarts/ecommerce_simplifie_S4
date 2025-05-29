@@ -1,17 +1,11 @@
 <div class="py-6 px-4 sm:px-6 lg:px-8 max-w-2xl mx-auto">
   <h1 class="text-3xl font-bold text-gray-900 mb-6">
-    {{ form.vars.data.id ? "Edit Product" : "New Product" }}
+    {{ form.vars.data.id ? "Modification produit" : "Ajout nouveau produit" }}
   </h1>
 
   {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
   <div>
-    {{ form_label(form.productName, 'Product Name', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'
-
-
-
-
-
-
+    {{ form_label(form.productName, 'Nom du produit', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'
 
 
 
@@ -20,21 +14,8 @@
 
 
 
-
-
-
-
-
-
     }}) }}
     {{ form_errors(form.productName, {'attr': {'class': 'text-red-600 text-sm mt-1'
-
-
-
-
-
-
-
 
 
     }}) }}
@@ -45,20 +26,8 @@
 
 
 
-
-
-
-
-
-
     }}) }}
     {{ form_widget(form.slug, {'attr': {'class': 'mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-950'
-
-
-
-
-
-
 
 
 
@@ -68,24 +37,12 @@
   </div>
 
   <div>
-    {{ form_label(form.price, 'Price (€)', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'
-
-
-
-
-
-
+    {{ form_label(form.price, 'Prix (€)', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'
 
 
 
     }}) }}
     {{ form_widget(form.price, {'attr': {'class': 'mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-950'
-
-
-
-
-
-
 
 
 
@@ -95,13 +52,7 @@
   </div>
 
   <div>
-    {{ form_label(form.quantity, 'Quantity', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'
-
-
-
-
-
-
+    {{ form_label(form.quantity, 'Quantité', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'
 
 
 
@@ -110,20 +61,8 @@
 
 
 
-
-
-
-
-
-
     }}) }}
     {{ form_errors(form.quantity, {'attr': {'class': 'text-red-600 text-sm mt-1'
-
-
-
-
-
-
 
 
 
@@ -131,24 +70,12 @@
   </div>
 
   <div>
-    {{ form_label(form.description, 'Description', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'
-
-
-
-
-
-
+    {{ form_label(form.description, 'Déscription', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'
 
 
 
     }}) }}
     {{ form_widget(form.description, {'attr': {'class': 'mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-950'
-
-
-
-
-
-
 
 
 
@@ -158,21 +85,11 @@
 
 
 
-
-
-
-
-
     }}) }}
   </div>
 
   <div>
-    {{ form_label(form.category, 'Category', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'
-
-
-
-
-
+    {{ form_label(form.category, 'Categorie', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'
 
 
 
@@ -183,18 +100,8 @@
 
 
 
-
-
-
-
-
     }}) }}
     {{ form_errors(form.category, {'attr': {'class': 'text-red-600 text-sm mt-1'
-
-
-
-
-
 
 
 
@@ -202,12 +109,21 @@
     }}) }}
   </div>
 
+  <div>
+    {{ form_label(form.image, 'Image du produit', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'
+    }}) }}
+    {{ form_widget(form.image, {'attr': {'class': 'mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-950 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-gray-100 file:text-gray-700 file:font-medium hover:file:bg-gray-200'
+    }}) }}
+    {{ form_errors(form.image, {'attr': {'class': 'text-red-600 text-sm mt-1'}})
+    }}
+  </div>
+
   <div class="flex justify-end">
     <button
       type="submit"
       class="px-6 py-2 bg-yellow-500 text-white font-semibold rounded-lg hover:bg-blue-950 transition-all duration-300"
     >
-      {{ button_label|default('Save') }}
+      {{ button_label|default('Ajouter') }}
     </button>
   </div>
   {{ form_end(form) }}

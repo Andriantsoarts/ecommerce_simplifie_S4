@@ -19,15 +19,32 @@ class RegistrationForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email')
-            ->add('userName')
-            ->add('firstName')
-            ->add('lastName')
-            ->add('phone')
-            ->add('phone2')
-            ->add('address')
-            ->add('address2')
+            ->add('email', null, [
+                'label' => 'Adresse e-mail',
+            ])
+            ->add('userName', null, [
+                'label' => 'Nom d’utilisateur',
+            ])
+            ->add('firstName', null, [
+                'label' => 'Prénom',
+            ])
+            ->add('lastName', null, [
+                'label' => 'Nom',
+            ])
+            ->add('phone', null, [
+                'label' => 'Téléphone principal',
+            ])
+            ->add('phone2', null, [
+                'label' => 'Téléphone secondaire',
+            ])
+            ->add('address', null, [
+                'label' => 'Adresse principale',
+            ])
+            ->add('address2', null, [
+                'label' => 'Adresse secondaire',
+            ])
             ->add('sexe', ChoiceType::class, [
+                'label' => 'Sexe',
                 'choices' => [
                     'Homme' => 'Homme',
                     'Femme' => 'Femme',
@@ -35,36 +52,42 @@ class RegistrationForm extends AbstractType
                 ],
             ])
             ->add('dateBirth', DateType::class, [
+                'label' => 'Date de naissance',
                 'widget' => 'single_text',
             ])
-            ->add('country')
-            ->add('city')
-            ->add('imageUrl') 
+            ->add('country', null, [
+                'label' => 'Pays',
+            ])
+            ->add('city', null, [
+                'label' => 'Ville',
+            ])
+            ->add('imageUrl', null, [
+                'label' => 'Photo de profil',
+            ])
             ->add('agreeTerms', CheckboxType::class, [
-                                'mapped' => false,
+                'label' => 'J’accepte les conditions générales',
+                'mapped' => false,
                 'constraints' => [
                     new IsTrue([
-                        'message' => 'You should agree to our terms.',
+                        'message' => 'Vous devez accepter nos conditions.',
                     ]),
                 ],
             ])
             ->add('plainPassword', PasswordType::class, [
-                                // instead of being set onto the object directly,
-                // this is read and encoded in the controller
+                'label' => 'Mot de passe',
                 'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter a password',
+                        'message' => 'Merci de saisir un mot de passe',
                     ]),
                     new Length([
                         'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
-                        // max length allowed by Symfony for security reasons
+                        'minMessage' => 'Votre mot de passe doit contenir au moins {{ limit }} caractères',
                         'max' => 4096,
                     ]),
                 ],
             ])
+
         ;
     }
 

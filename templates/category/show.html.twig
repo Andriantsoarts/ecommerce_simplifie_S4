@@ -1,39 +1,115 @@
-{% extends 'dashboard/index.html.twig' %} {% block title %}Category{% endblock
-%} {% block content %}
-<h1>Category</h1>
+{% extends 'dashboard/index.html.twig' %} {% block title %}Détails de la
+catégorie | Dashboard{% endblock %} {% block content %}
+<div class="py-6 px-4 sm:px-6 lg:px-8">
+  <h1 class="text-3xl font-bold text-gray-900 mb-6">Détails de la catégorie</h1>
 
-<table class="table">
-  <tbody>
-    <tr>
-      <th>Id</th>
-      <td>{{ category.id }}</td>
-    </tr>
-    <tr>
-      <th>CategoryName</th>
-      <td>{{ category.categoryName }}</td>
-    </tr>
-    <tr>
-      <th>CategorySlug</th>
-      <td>{{ category.categorySlug }}</td>
-    </tr>
-    <tr>
-      <th>CreatedAt</th>
-      <td>
-        {{ category.createdAt ? category.createdAt|date('Y-m-d H:i:s') : '' }}
-      </td>
-    </tr>
-    <tr>
-      <th>UpdatedAt</th>
-      <td>
-        {{ category.updatedAt ? category.updatedAt|date('Y-m-d H:i:s') : '' }}
-      </td>
-    </tr>
-  </tbody>
-</table>
+  <div
+    class="bg-white border border-gray-200 rounded-lg shadow-md p-6 max-w-2xl mx-auto"
+  >
+    <div class="space-y-4">
+      <div class="flex items-center border-b border-gray-200 pb-2">
+        <span class="text-sm font-medium text-gray-500 w-1/3"
+          >Nom de la catégorie</span
+        >
+        <span class="text-sm text-gray-900">{{ category.categoryName }}</span>
+      </div>
+      <div class="flex items-center border-b border-gray-200 pb-2">
+        <span class="text-sm font-medium text-gray-500 w-1/3">Slug</span>
+        <span class="text-sm text-gray-900">{{ category.categorySlug }}</span>
+      </div>
+      <div class="flex items-center border-b border-gray-200 pb-2">
+        <span class="text-sm font-medium text-gray-500 w-1/3"
+          >Date de création</span
+        >
+        <span class="text-sm text-gray-900">
+          {{ category.createdAt ? category.createdAt|date('d/m/Y H:i') : '-' }}
+        </span>
+      </div>
+      <div class="flex items-center border-b border-gray-200 pb-2">
+        <span class="text-sm font-medium text-gray-500 w-1/3"
+          >Date de mise à jour</span
+        >
+        <span class="text-sm text-gray-900">
+          {{ category.updatedAt ? category.updatedAt|date('d/m/Y H:i') : '-' }}
+        </span>
+      </div>
+    </div>
 
-<a href="{{ path('app_category_index') }}">back to list</a>
-
-<a href="{{ path('app_category_edit', { id: category.id }) }}">edit</a>
-
-{{ include("category/_delete_form.html.twig") }}
+    <div class="mt-6 flex space-x-4">
+      <a
+        href="{{ path('app_category_index') }}"
+        class="inline-flex items-center px-4 py-2 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-all duration-300"
+      >
+        <svg
+          class="w-5 h-5 mr-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          ></path>
+        </svg>
+        Retour
+      </a>
+      <a
+        href="{{ path('app_category_edit', { id: category.id }) }}"
+        class="inline-flex items-center px-4 py-2 bg-blue-950 text-white font-semibold rounded-lg hover:bg-blue-900 transition-all duration-300"
+      >
+        <svg
+          class="w-5 h-5 mr-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+          ></path>
+        </svg>
+        Modifier
+      </a>
+      <form
+        method="post"
+        action="{{ path('app_category_delete', { id: category.id }) }}"
+        onsubmit="return confirm('Voulez-vous vraiment supprimer cette catégorie ?');"
+        class="inline-flex"
+      >
+        <input
+          type="hidden"
+          name="_token"
+          value="{{ csrf_token('delete' ~ category.id) }}"
+        />
+        <button
+          type="submit"
+          class="inline-flex items-center px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:cursor-pointer hover:bg-red-700 transition-all duration-300"
+          onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?');"
+        >
+          <svg
+            class="w-5 h-5 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            ></path>
+          </svg>
+          Supprimer
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
 {% endblock %}

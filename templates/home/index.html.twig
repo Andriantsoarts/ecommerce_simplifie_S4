@@ -1,20 +1,32 @@
-{% extends 'base.html.twig' %} {% block title %}Accueil - Mon E-commerce{%
-endblock %} {% block body %}
+{% extends 'base.html.twig' %} {% block title %}Accueil - ShirTeeZone{% endblock
+%} {% block body %}
 <div class="bg-gray-100 min-h-screen flex flex-col">
   {# Navbar #}
-  <div class="shadow-md bg-white">{% include 'NavBar/navbar.html.twig' %}</div>
+    <div class="shadow-md bg-white">{% include 'NavBar/navbar.html.twig' %}</div>
+  {% for label, messages in app.flashes %}
+    {% for message in messages %}
+      <div class="mx-auto mt-4 w-11/12 md:w-2/3 lg:w-1/2 px-4 py-3 rounded relative
+                  {% if label == 'success' %} bg-green-100 text-green-800 border border-green-400
+                  {% elseif label == 'error' %} bg-red-100 text-red-800 border border-red-400
+                  {% else %} bg-blue-100 text-blue-800 border border-blue-400
+                  {% endif %}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endfor %}
+
 
   {# Carousel #}
   <div class="carousel-container mt-4">
     <div class="carousel-track">
       <div class="carousel-slide">
-        <img src="https://placehold.co/600x400" alt="Promo 1" />
+        <img src="{{ asset('images/image2.jpg') }}" alt="Promo 1" />
       </div>
       <div class="carousel-slide">
-        <img src="https://placehold.co/600x400" alt="Promo 2" />
+        <img src="{{ asset('images/image1.jpg') }}" alt="Promo 2" />
       </div>
       <div class="carousel-slide">
-        <img src="https://placehold.co/600x400" alt="Promo 3" />
+        <img src="{{ asset('images/image3.jpg') }}" alt="Promo 3" />
       </div>
     </div>
   </div>
@@ -54,33 +66,37 @@ endblock %} {% block body %}
           class="w-32 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-950"
         />
       </div>
-    </div>
-    <div
-      id="product-grid"
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-    >
-      {% for i in 1..500 %}
+      </div><div
+    id="product-grid"
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+  >
+    {% for product in products %}
       <div
         class="product-item bg-white shadow rounded-lg overflow-hidden"
-        data-index="{{ i - 1 }}"
+        data-id="{{ product.id }}"
       >
         <img
-          src="https://source.unsplash.com/300x200/?product,{{ i }}"
-          alt="Produit {{ i }}"
+          src="https://placehold.co/200x300?text={{ product.productName|url_encode }}"
+          alt="{{ product.productName }}"
           class="w-full h-48 object-cover"
         />
         <div class="p-4">
-          <h3 class="text-lg font-semibold">Produit {{ i }}</h3>
-          <p class="text-gray-600">Description courte du produit {{ i }}.</p>
-          <p class="text-blue-950 font-bold mt-2">€{{ i * 3.5 }}</p>
-          <button
-            class="mt-4 bg-yellow-500 hover:bg-blue-950 hover:cursor-pointer transition-all duration-300 text-white px-4 py-2 rounded"
+          <h3 class="text-lg font-semibold">{{ product.productName }}</h3>
+          <p class="text-gray-600">{{ product.description }}</p>
+          <p class="text-blue-950 font-bold mt-2">€{{ product.price }}</p>
+          <a
+            href="{{ path('add_to_cart', { id: product.id }) }}"
+            class="mt-4 bg-yellow-500 hover:bg-blue-950 hover:cursor-pointer transition-all duration-300 text-white px-4 py-2 rounded inline-block text-center"
           >
             Ajouter au panier
-          </button>
+          </a>
+
         </div>
       </div>
-      {% endfor %}
+    {% else %}
+      <p class="col-span-full text-center text-gray-500">Aucun produit disponible.</p>
+    {% endfor %}
+  </div>
     </div>
     <div class="flex justify-center mt-8 space-x-2">
       <button
@@ -108,9 +124,7 @@ endblock %} {% block body %}
       >
         <i class="fas fa-shipping-fast text-4xl mb-4"></i>
         <h3 class="text-xl font-semibold text-black mb-2">Livraison Rapide</h3>
-        <p class="text-gray-600">
-          Recevez vos produits en 48h partout en France.
-        </p>
+        <p class="text-gray-600">Recevez vos produits en 48h.</p>
       </div>
       <div
         class="p-6 bg-white rounded-lg shadow text-yellow-500 hover:bg-yellow-500 hover:text-blue-950 hover:shadow-blue-950 transition-all duration-300 hover:cursor-pointer"
@@ -118,7 +132,7 @@ endblock %} {% block body %}
         <i class="fas fa-lock text-4xl mb-4"></i>
         <h3 class="text-xl font-semibold text-black mb-2">Paiement Sécurisé</h3>
         <p class="text-gray-600">
-          Paiement par carte bancaire ou PayPal sécurisé.
+          Paiement par carte bancaire ou en éspèces à la livraison.
         </p>
       </div>
       <div
@@ -128,7 +142,9 @@ endblock %} {% block body %}
         <h3 class="text-xl font-semibold text-black mb-2">
           Satisfait ou remboursé
         </h3>
-        <p class="text-gray-600">30 jours pour changer d’avis.</p>
+        <p class="text-gray-600">
+          En cas de défaut de fabrication, nous prenons en charge les retours.
+        </p>
       </div>
     </div>
   </section>
@@ -137,7 +153,7 @@ endblock %} {% block body %}
   <footer class="bg-blue-950 text-white mt-auto py-8">
     <div class="container mx-auto text-center">
       <p class="text-sm">
-        &copy; {{ "now"|date("Y") }} Mon E-commerce. Tous droits réservés.
+        &copy; {{ "now"|date("Y") }} ShirTeeZone. Tous droits réservés.
       </p>
       <div class="mt-4 flex justify-center space-x-4">
         <a href="#" class="hover:text-yellow-500"

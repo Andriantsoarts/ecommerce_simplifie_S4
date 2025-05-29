@@ -1,51 +1,127 @@
-{% extends 'dashboard/index.html.twig' %} {% block title %}Product{% endblock %}
-{% block content %}
-<h1>Product</h1>
+{% extends 'dashboard/index.html.twig' %} {% block title %}Détails du produit |
+Dashboard{% endblock %} {% block content %}
+<div class="py-6 px-4 sm:px-6 lg:px-8">
+  <h1 class="text-3xl font-bold text-gray-900 mb-6">Détails du produit</h1>
 
-<table class="table">
-  <tbody>
-    <tr>
-      <th>Id</th>
-      <td>{{ product.id }}</td>
-    </tr>
-    <tr>
-      <th>ProductName</th>
-      <td>{{ product.productName }}</td>
-    </tr>
-    <tr>
-      <th>Slug</th>
-      <td>{{ product.slug }}</td>
-    </tr>
-    <tr>
-      <th>Price</th>
-      <td>{{ product.price }}</td>
-    </tr>
-    <tr>
-      <th>Quantity</th>
-      <td>{{ product.quantity }}</td>
-    </tr>
-    <tr>
-      <th>Description</th>
-      <td>{{ product.description }}</td>
-    </tr>
-    <tr>
-      <th>CreatedAt</th>
-      <td>
-        {{ product.createdAt ? product.createdAt|date('Y-m-d H:i:s') : '' }}
-      </td>
-    </tr>
-    <tr>
-      <th>UpdatedAt</th>
-      <td>
-        {{ product.updatedAt ? product.updatedAt|date('Y-m-d H:i:s') : '' }}
-      </td>
-    </tr>
-  </tbody>
-</table>
+  <div
+    class="bg-white border border-gray-200 rounded-lg shadow-md p-6 max-w-2xl mx-auto"
+  >
+    <div class="space-y-4">
+      <div class="flex items-center border-b border-gray-200 pb-2">
+        <span class="text-sm font-medium text-gray-500 w-1/3"
+          >Nom du produit</span
+        >
+        <span class="text-sm text-gray-900">{{ product.productName }}</span>
+      </div>
+      <div class="flex items-center border-b border-gray-200 pb-2">
+        <span class="text-sm font-medium text-gray-500 w-1/3">Slug</span>
+        <span class="text-sm text-gray-900">{{ product.slug }}</span>
+      </div>
+      <div class="flex items-center border-b border-gray-200 pb-2">
+        <span class="text-sm font-medium text-gray-500 w-1/3">Prix</span>
+        <span class="text-sm text-gray-900">{{ product.price }} €</span>
+      </div>
+      <div class="flex items-center border-b border-gray-200 pb-2">
+        <span class="text-sm font-medium text-gray-500 w-1/3">Quantité</span>
+        <span class="text-sm text-gray-900">{{ product.quantity }}</span>
+      </div>
+      <div class="flex items-center border-b border-gray-200 pb-2">
+        <span class="text-sm font-medium text-gray-500 w-1/3">Description</span>
+        <span class="text-sm text-gray-900">{{ product.description }}</span>
+      </div>
+      <div class="flex items-center border-b border-gray-200 pb-2">
+        <span class="text-sm font-medium text-gray-500 w-1/3"
+          >Date d'ajout</span
+        >
+        <span class="text-sm text-gray-900">
+          {{ product.createdAt ? product.createdAt|date('d/m/Y H:i') : '-' }}
+        </span>
+      </div>
+      <div class="flex items-center border-b border-gray-200 pb-2">
+        <span class="text-sm font-medium text-gray-500 w-1/3"
+          >Date de mise à jour</span
+        >
+        <span class="text-sm text-gray-900">
+          {{ product.updatedAt ? product.updatedAt|date('d/m/Y H:i') : '-' }}
+        </span>
+      </div>
+    </div>
 
-<a href="{{ path('app_product_index') }}">back to list</a>
-
-<a href="{{ path('app_product_edit', { id: product.id }) }}">edit</a>
-
-{{ include("product/_delete_form.html.twig") }}
+    <div class="mt-6 flex space-x-4">
+      <a
+        href="{{ path('app_product_index') }}"
+        class="inline-flex items-center px-4 py-2 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-all duration-300"
+      >
+        <svg
+          class="w-5 h-5 mr-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          ></path>
+        </svg>
+        Retour
+      </a>
+      <a
+        href="{{ path('app_product_edit', { id: product.id }) }}"
+        class="inline-flex items-center px-4 py-2 bg-blue-950 text-white font-semibold rounded-lg hover:bg-blue-900 transition-all duration-300"
+      >
+        <svg
+          class="w-5 h-5 mr-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+          ></path>
+        </svg>
+        Éditer
+      </a>
+      <form
+        method="post"
+        action="{{ path('app_product_delete', { id: product.id }) }}"
+        onsubmit="return confirm('Voulez-vous vraiment supprimer ce produit ?');"
+        class="inline-flex"
+      >
+        <input
+          type="hidden"
+          name="_token"
+          value="{{ csrf_token('delete' ~ product.id) }}"
+        />
+        <button
+          type="submit"
+          class="inline-flex items-center px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:cursor-pointer hover:bg-red-700 transition-all duration-300"
+          onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?');"
+        >
+          <svg
+            class="w-5 h-5 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            ></path>
+          </svg>
+          Supprimer
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
 {% endblock %}

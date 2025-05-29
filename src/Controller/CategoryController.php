@@ -61,6 +61,8 @@ final class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $now = new \DateTimeImmutable();
+            $category->setUpdatedAt($now);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);

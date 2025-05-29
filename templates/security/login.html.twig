@@ -1,34 +1,101 @@
-{% extends 'base.html.twig' %}
+{% extends 'base.html.twig' %} {% block title %}Log in!{% endblock %} {% block
+body %}
 
-{% block title %}Log in!{% endblock %}
+<div
+  class="min-h-screen flex items-center justify-center bg-gray-100 relative px-4 sm:px-6 lg:px-8"
+>
+  <div
+    class="w-full max-w-xs sm:max-w-sm md:max-w-md p-6 sm:p-8 bg-white shadow-lg rounded-xl"
+  >
+    <a
+      href="{{ path('app_home') }}"
+      class="fixed top-4 left-0 bg-yellow-500 text-white font-semibold px-3 py-2 sm:px-4 sm:py-2 rounded-r-full shadow hover:bg-blue-950 hover:shadow-yellow-500 transition-all duration-300 z-10 flex items-center space-x-2 text-sm sm:text-base"
+    >
+      <i class="fas fa-arrow-left"></i>
+      <span class="hidden sm:inline">Accueil</span>
+    </a>
 
-{% block body %}
-<form method="post">
+    <h2 class="text-xl sm:text-2xl font-bold mb-6 text-center text-blue-950">
+      Connexion
+    </h2>
+
     {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
-
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
-        </div>
-    {% endif %}
-
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-    <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
-
-    <div class="checkbox mb-3">
-        <label>
-            <input type="checkbox" name="_remember_me"> Remember me
-        </label>
+    <div
+      class="mb-4 px-4 py-3 bg-red-100 border border-red-400 text-red-700 rounded"
+    >
+      {{ error.messageKey|trans(error.messageData, 'security') }}
     </div>
+    {% endif %}
 
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-</form>
+    <form method="post" class="space-y-4">
+      <div>
+        <label for="inputEmail" class="block text-sm font-medium text-gray-700"
+          >Adresse E-mail</label
+        >
+        <input
+          type="email"
+          name="email"
+          id="inputEmail"
+          value="{{ last_username }}"
+          class="mt-1 block w-full px-3 py-2 sm:px-4 sm:py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
+          autocomplete="email"
+          required
+          autofocus
+        />
+      </div>
+
+      <div>
+        <label
+          for="inputPassword"
+          class="block text-sm font-medium text-gray-700"
+          >Mot de passe</label
+        >
+        <input
+          type="password"
+          name="password"
+          id="inputPassword"
+          class="mt-1 block w-full px-3 py-2 sm:px-4 sm:py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
+          autocomplete="current-password"
+          required
+        />
+      </div>
+
+      <input
+        type="hidden"
+        name="_csrf_token"
+        data-controller="csrf-protection"
+        value="{{ csrf_token('authenticate') }}"
+      />
+
+      <div
+        class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0"
+      >
+        <label class="inline-flex items-center">
+          <input type="checkbox" name="_remember_me" class="h-4 w-4" />
+          <span class="ml-2 text-xs sm:text-sm text-blue-950"
+            >Se souvenir de moi</span
+          >
+        </label>
+        <a href="#" class="text-xs sm:text-sm text-yellow-500 hover:underline"
+          >Mot de passe oublié ?</a
+        >
+      </div>
+
+      <button
+        type="submit"
+        class="w-full py-2 px-4 bg-yellow-500 text-white font-semibold rounded-md shadow hover:bg-blue-950 hover:cursor-pointer hover:shadow-yellow-500 transition-all duration-300 focus:outline-none text-sm sm:text-base"
+      >
+        Se connecter
+      </button>
+
+      <div class="text-center mt-4">
+        <a
+          href="{{ path('app_register') }}"
+          class="text-xs sm:text-sm text-yellow-500 hover:underline"
+          >S’inscrire</a
+        >
+      </div>
+    </form>
+  </div>
+</div>
 {% endblock %}
