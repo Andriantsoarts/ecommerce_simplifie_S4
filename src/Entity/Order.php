@@ -122,6 +122,19 @@ class Order
         return $this;
     }
 
+    public function updateStatus(): void
+    {
+        if ($this->isReturned) {
+            $this->status = 'Retourné';
+        } elseif ($this->isDelivred) {
+            $this->status = 'Livrée';
+        } elseif ($this->isConfirmed) {
+            $this->status = 'En cours de livraison';
+        } else {
+            $this->status = 'En cours de traitement';
+        }
+    }
+
     public function isDelivred(): ?bool
     {
         return $this->isDelivred;

@@ -86,12 +86,10 @@ final class ProductController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $now = new \DateTimeImmutable();
             $product->setUpdatedAt($now);
-            // Handle image upload
                 $imageFile = $form->get('image')->getData();
                 error_log('Image file: ' . ($imageFile ? $imageFile->getClientOriginalName() : 'None'));
 
                 if ($imageFile) {
-                    // Delete old image if it exists
                     if ($product->getImageUrl()) {
                         $oldImagePath = $this->getParameter('products_directory') . '/' . basename($product->getImageUrl());
                         if (file_exists($oldImagePath)) {
@@ -100,7 +98,6 @@ final class ProductController extends AbstractController
                         }
                     }
 
-                    // Save new image
                     $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
                     $safeFilename = $slugger->slug($originalFilename);
                     $newFilename = $safeFilename . '-' . uniqid() . '.' . $imageFile->guessExtension();

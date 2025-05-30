@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %} {% block title %}Mes commandes{% endblock %} {%
+block body %}
+<div class="container mx-auto px-4 py-8">
+  <a
+    href="{{ path('app_home') }}"
+    class="fixed top-4 left-0 bg-yellow-500 text-white font-semibold px-3 py-2 sm:px-4 sm:py-2 rounded-r-full shadow hover:bg-blue-950 hover:shadow-yellow-500 transition-all duration-300 z-10 flex items-center space-x-2 text-sm sm:text-base"
+  >
+    <i class="fas fa-arrow-left"></i>
+    <span class="hidden sm:inline">Accueil</span>
+  </a>
+
+  <h1 class="text-3xl font-bold mb-6 text-center">Mes commandes</h1>
+
+  {% if orders is empty %}
+  <p class="text-center text-gray-600">
+    Vous n'avez passé aucune commande pour le moment.
+  </p>
+  {% else %} {% for order in orders %}
+  <div class="bg-white shadow rounded-lg p-6 mb-8 border border-gray-300">
+    <h2 class="text-xl font-semibold text-blue-950 mb-2">
+      Commande n°2025{{ order.id }}
+    </h2>
+    <p><strong>Date :</strong> {{ order.createdAt|date('d/m/Y H:i') }}</p>
+    <p><strong>Adresse de livraison :</strong> {{ order.deliveryAddress }}</p>
+    <p><strong>Statut :</strong> {{ order.status }}</p>
+    <p>
+      <strong>Confirmée :</strong>
+      <span class="{{ order.isConfirmed ? 'text-green-600' : 'text-red-600' }}">
+        {{ order.isConfirmed ? "Oui" : "Non" }}
+      </span>
+    </p>
+    <p>
+      <strong>Livrée :</strong>
+      <span class="{{ order.isDelivred ? 'text-green-600' : 'text-red-600' }}">
+        {{ order.isDelivred ? "Oui" : "Non" }}
+      </span>
+    </p>
+
+    <h3 class="mt-6 font-semibold text-lg">Articles commandés :</h3>
+
+    <div class="overflow-x-auto mt-2">
+      <table
+        class="min-w-full bg-white shadow border border-gray-300 rounded-lg"
+      >
+        <thead class="bg-blue-950 text-white">
+          <tr>
+            <th class="py-3 px-6 text-left">Produit</th>
+            <th class="py-3 px-6 text-left">Quantité</th>
+            <th class="py-3 px-6 text-left">Prix (€)</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-800">
+          {% set total = 0 %} {% for item in order.items %} {% set total = total
+          + (item.price * item.quantity) %}
+          <tr class="border-t">
+            <td class="py-3 px-6">{{ item.product.productName }}</td>
+            <td class="py-3 px-6">{{ item.quantity }}</td>
+            <td class="py-3 px-6">
+              {{ item.price|number_format(2, '.', ',') }}
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="3" class="py-3 px-6 text-center text-gray-500">
+              Aucun article
+            </td>
+          </tr>
+          {% endfor %}
+          <tr class="border-t font-semibold">
+            <td class="py-3 px-6 text-right" colspan="2">Total :</td>
+            <td class="py-3 px-6">{{ total|number_format(2, '.', ',') }} €</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endfor %} {% endif %}
+</div>
+{% endblock %}

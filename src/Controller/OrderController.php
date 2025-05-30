@@ -10,6 +10,8 @@ use App\Service\CartService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -101,14 +103,122 @@ final class OrderController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
-        // Marquer comme validée (ex: statut)
         $order->setStatus('En cours de traitement');
         $em->flush();
 
-        return $this->render('order/order_confirmed.html.twig', [
-            'order' => $order
+        return $this->redirectToRoute('order_confirmed', ['id' => $order->getId()]);
+
+    }
+    #[Route('/order-show', name:'order_show', methods:['GET'])]
+    public function getAllOrders(EntityManagerInterface $em): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $orders = $em->getRepository(Order::class)->findBy(['Client' => $user], ['createdAt' => 'DESC'] );
+
+        return $this->render('order/order_show.html.twig', [
+            'orders' => $orders,
         ]);
     }
+
+    #[Route('/order/cancel/{id}', name: 'order_cancel', methods: ['POST'])]
+    public function cancelOrder(Order $order, Security $security, EntityManagerInterface $em): Response
+    {
+        $user = $security->getUser();
+
+        if ($order->getClient() !== $user) {
+            throw $this->createAccessDeniedException();
+        }
+        foreach ($order->getItems() as $item) {
+            $em->remove($item);
+        }
+
+
+        $em->remove($order);
+        $em->flush();
+
+        return $this->redirectToRoute('app_home');
+    }
+
+    #[Route('/order/confirmed/{id}', name: 'order_confirmed', methods: ['GET'])]
+    public function confirmed(Order $order, Security $security): Response
+    {
+        $user = $security->getUser();
+
+        if ($order->getClient() !== $user) {
+            throw $this->createAccessDeniedException();
+        }
+
+        return $this->render('order/order_confirmed.html.twig', [
+            'order' => $order,
+        ]);
+    }
+    #[Route('/order/{id}/toggle-confirm', name: 'app_order_toggle_confirm', methods: ['POST'])]
+    #[\Symfony\Component\Security\Http\Attribute\IsGranted('ROLE_ADMIN')]
+    public function toggleConfirm(
+        Request $request,
+        Order $order,
+        EntityManagerInterface $em
+    ): JsonResponse {
+        if (!$request->isXmlHttpRequest()) {
+            return new JsonResponse(['error' => 'Requête non autorisée'], 400);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        if (!isset($data['value'])) {
+            return new JsonResponse(['error' => 'Valeur manquante'], 400);
+        }
+
+        $order->setIsConfirmed((bool) $data['value']);
+        $order->updateStatus(); 
+        $order->setUpdatedAt(new \DateTimeImmutable());
+        $em->flush();
+
+        return new JsonResponse([
+            'success' => true,
+            'status' => $order->getStatus(),
+        ]);
+    }
+
+    #[Route('/order/{id}/toggle-delivred', name: 'order_toggle_delivred', methods: ['POST'])]
+    #[\Symfony\Component\Security\Http\Attribute\IsGranted('ROLE_ADMIN')]
+    public function toggleDelivred(Order $order, Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        if (!$request->isXmlHttpRequest()) {
+            return new JsonResponse(['error' => 'Requête non autorisée'], 400);
+        }
+        $data = json_decode($request->getContent(), true);
+        $order->setIsDelivred($data['value']);
+        $order->updateStatus();
+        $order->setUpdatedAt(new \DateTimeImmutable());
+        $em->flush();
+
+        return new JsonResponse([
+            'success' => true,
+            'status' => $order->getStatus(),
+        ]);
+    }
+
+    #[Route('/order/{id}/toggle-returned', name: 'order_toggle_returned', methods: ['POST'])]
+    #[\Symfony\Component\Security\Http\Attribute\IsGranted('ROLE_ADMIN')]
+    public function toggleReturned(Order $order, Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $order->setIsReturned($data['value']);
+        $order->updateStatus();
+        $order->setUpdatedAt(new \DateTimeImmutable());
+        $em->flush();
+
+        return new JsonResponse([
+            'success' => true,
+            'status' => $order->getStatus(),
+        ]);
+    }
+
 
 
 }

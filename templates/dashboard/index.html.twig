@@ -33,6 +33,14 @@
         <ul class="space-y-3">
           <li>
             <a
+              href="{{ path('app_dashboard') }}"
+              class="block py-2 px-4 rounded hover:bg-blue-100"
+            >
+              <i class="fas fa-table"></i> Accueil
+            </a>
+          </li>
+          <li>
+            <a
               href="{{ path('app_product_index') }}"
               class="block py-2 px-4 rounded hover:bg-blue-100"
             >
@@ -61,7 +69,263 @@
     </aside>
 
     <main class="flex-1 p-6 overflow-y-auto">
-      {% block content %} {% endblock %}
+      {% block content %}
+      <div class="py-6 px-4 sm:px-6 lg:px-8">
+        <h1 class="text-3xl font-bold text-blue-950 mb-4">Commandes</h1>
+
+        <div class="overflow-x-auto">
+          <table
+            class="min-w-full bg-white border border-gray-200 rounded-lg shadow"
+          >
+            <thead class="bg-gray-100">
+              <tr>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  N° de commande
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Client
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Adresse de livraison
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Confirmée
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Statut
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Livrée
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Retournée
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Créée le
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for order in orders %}
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  2025{{ order.id }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {{ order.client ? order.client.userName : "N/A" }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {{ order.deliveryAddress }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <label class="inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      class="sr-only peer toggle-confirm"
+                      data-order-id="{{ order.id }}"
+                      {%
+                      if
+                      order.isConfirmed
+                      %}checked{%
+                      endif
+                      %}
+                      {#
+                      {%
+                      if
+                      order.isDelivred
+                      or
+                      order.isReturned
+                      %}disabled{%
+                      endif
+                      %}
+                      #}
+                    />
+                    <div
+                      class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"
+                    ></div>
+                    <span
+                      class="ml-2 text-sm font-semibold {% if order.isConfirmed %}text-green-600{% else %}text-red-500{% endif %}"
+                    >
+                      {% if order.isConfirmed %}Oui{% else %}Non{% endif %}
+                    </span>
+                  </label>
+                </td>
+
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <p class="order-status" data-order-id="{{ order.id }}">
+                    {{ order.status }}
+                  </p>
+                </td>
+                <!-- Colonne isDelivred -->
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <label class="inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      class="sr-only peer toggle-delivred"
+                      data-order-id="{{ order.id }}"
+                      {%
+                      if
+                      order.isDelivred
+                      %}checked{%
+                      endif
+                      %}
+                      {#
+                      {%
+                      if
+                      order.isReturned
+                      or
+                      not
+                      order.isConfirmed
+                      %}disabled{%
+                      endif
+                      %}
+                      #}
+                    />
+                    <div
+                      class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"
+                    ></div>
+                    <span
+                      class="ml-2 text-sm font-semibold {% if order.isDelivred %}text-green-600{% else %}text-red-500{% endif %}"
+                    >
+                      {% if order.isDelivred %}Oui{% else %}Non{% endif %}
+                    </span>
+                  </label>
+                </td>
+
+                <!-- Colonne isReturned -->
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <label class="inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      class="sr-only peer toggle-returned"
+                      data-order-id="{{ order.id }}"
+                      {%
+                      if
+                      order.isReturned
+                      %}checked{%
+                      endif
+                      %}
+                    />
+                    <div
+                      class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"
+                    ></div>
+                    <span
+                      class="ml-2 text-sm font-semibold {% if order.isReturned %}text-red-600{% else %}text-gray-600{% endif %}"
+                    >
+                      {% if order.isReturned %}Oui{% else %}Non{% endif %}
+                    </span>
+                  </label>
+                </td>
+
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {{ order.createdAt ? order.createdAt|date('Y-m-d H:i') : '' }}
+                </td>
+              </tr>
+              {% else %}
+              <tr>
+                <td
+                  colspan="10"
+                  class="px-6 py-4 text-center text-sm text-gray-500"
+                >
+                  Aucune commande enregistrée.
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {% endblock %}
     </main>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        function setupToggle(
+          selector,
+          urlPath,
+          yesText,
+          noText,
+          yesClass,
+          noClass
+        ) {
+          document.querySelectorAll(selector).forEach(function (checkbox) {
+            checkbox.addEventListener("change", function () {
+              const orderId = this.dataset.orderId;
+              const isChecked = this.checked;
+              const label = this.closest("label");
+              const statusText = label.querySelector("span");
+              const statusContent = document.querySelector(
+                `.order-status[data-order-id="${orderId}"]`
+              );
+
+              fetch(`/order/${orderId}/${urlPath}`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "X-Requested-With": "XMLHttpRequest",
+                },
+                body: JSON.stringify({ value: isChecked }),
+              })
+                .then((response) => {
+                  if (!response.ok) throw new Error("Erreur serveur");
+                  return response.json();
+                })
+                .then((data) => {
+                  statusText.textContent = isChecked ? yesText : noText;
+                  statusText.classList.remove(yesClass, noClass);
+                  statusText.classList.add(isChecked ? yesClass : noClass);
+                  statusContent.textContent = data.status;
+                })
+                .catch((error) => {
+                  alert("Erreur : " + error.message);
+                  this.checked = !isChecked;
+                });
+            });
+          });
+        }
+
+        setupToggle(
+          ".toggle-confirm",
+          "toggle-confirm",
+          "Oui",
+          "Non",
+          "text-green-600",
+          "text-red-500"
+        );
+
+        setupToggle(
+          ".toggle-delivred",
+          "toggle-delivred",
+          "Oui",
+          "Non",
+          "text-green-600",
+          "text-red-500"
+        );
+
+        setupToggle(
+          ".toggle-returned",
+          "toggle-returned",
+          "Oui",
+          "Non",
+          "text-red-600",
+          "text-gray-600"
+        );
+      });
+    </script>
   </body>
 </html>

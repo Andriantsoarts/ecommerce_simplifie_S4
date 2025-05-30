@@ -126,7 +126,7 @@ final class CartController extends AbstractController
 
         if ($cart) {
             foreach ($cart->getCartItems() as $item) {
-                $em->remove($item); // Supprime chaque CartItem
+                $em->remove($item);
             }
             $em->flush();
         }

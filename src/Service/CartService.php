@@ -50,19 +50,15 @@ class CartService
     {
         $user = $this->security->getUser();
 
-        // On récupère les paniers de l'utilisateur dont la commande est finalisée
         $carts = $this->cartRepository->findBy([
             'userOwner' => $user,
             'isOrderDone' => true,
         ]);
 
         foreach ($carts as $cart) {
-            // Supprimer les items du panier
             foreach ($cart->getCartItems() as $item) {
                 $item->setCart(null);
             }
-
-            // Puis supprimer le panier lui-même
             $this->em->remove($cart);
         }
 
