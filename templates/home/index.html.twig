@@ -37,36 +37,35 @@
     <div
       class="flex flex-col items-center mb-6 space-y-4 md:flex-row md:space-y-0 md:space-x-4 md:justify-center"
     >
-      <input
-        id="search-input"
-        type="text"
-        placeholder="Rechercher un produit..."
-        class="w-full max-w-md px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-950"
-      />
-      <select
-        id="sort-select"
-        class="w-full max-w-xs px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-950"
-      >
-        <option value="name-asc">Nom (A-Z)</option>
-        <option value="name-desc">Nom (Z-A)</option>
-        <option value="price-asc">Prix (croissant)</option>
-        <option value="price-desc">Prix (décroissant)</option>
-      </select>
-      <div class="flex space-x-2">
+      <form method="get" class="w-full flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4 justify-center mb-10">
         <input
-          id="min-price"
-          type="number"
-          placeholder="Prix min (€)"
-          class="w-32 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-950"
+          name="search"
+          type="text"
+          value="{{ app.request.get('search') }}"
+          placeholder="Rechercher un produit..."
+          class="w-full my-2 max-w-md px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-950"
         />
-        <input
-          id="max-price"
-          type="number"
-          placeholder="Prix max (€)"
-          class="w-32 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-950"
-        />
-      </div>
-      </div><div
+          
+        <select
+          name="category"
+          class="w-full sm:w-64 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-950"
+        >
+          <option value= null>-- Toutes les catégories --</option>
+          {% for category in categories %}
+            <option value="{{ category.id }}" {% if selectedCategory == category.id %}selected{% endif %}>
+              {{ category.categoryName }}
+            </option>
+          {% endfor %}
+        </select>
+        <button
+          type="submit"
+          class="bg-yellow-500 hover:bg-blue-950 transition-all duration-300 text-white px-4 py-2 rounded"
+        >
+          Rechercher
+        </button>
+      </form>
+    </div>
+    <div
     id="product-grid"
     class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
   >

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Product;
 use App\Form\ProductForm;
+use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,10 +18,27 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 final class ProductController extends AbstractController
 {
     #[Route(name: 'app_product_index', methods: ['GET'])]
-    public function index(ProductRepository $productRepository): Response
-    {
+    public function index(
+        Request $request,
+        ProductRepository $productRepository,
+        CategoryRepository $categoryRepository
+    ): Response {
+        $search = $request->query->get('search');
+        $categoryId = $request->query->get('category');
+        if (!is_numeric($categoryId)) {
+            $categoryId = null;
+        } else {
+            $categoryId = (int)$categoryId;
+        }
+
+        $products = $productRepository->findBySearchAndCategory($search, $categoryId);
+        $categories = $categoryRepository->findAll();
+
         return $this->render('product/index.html.twig', [
-            'products' => $productRepository->findAll(),
+            'products' => $products,
+            'categories' => $categories,
+            'search' => $search,
+            'selectedCategory' => $categoryId,
         ]);
     }
 
